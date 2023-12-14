@@ -12,7 +12,8 @@ class SalesReportController extends Controller
     public function index(Request $request): View
     {
         //Default Value
-        $year = $request->filled('tahun') ? $request->input('tahun') : 2021;
+        $isValidYear = empty($request->all()) || $request->input('tahun') != null;
+        $year = empty($request->all()) ? 2021 : $request->input('tahun');
 
         //Get and collect data from API
         $menus = collect(Http::get('https://tes-web.landa.id/intermediate/menu')->json());
@@ -44,16 +45,22 @@ class SalesReportController extends Controller
 
                 //Grand Total
                 $summaryMonths[12] += $menu['total'];
-
-                $results[$key] = $menu;
             }catch (\Exception $e) {
-
+                $menu['subtotal'] = array_fill(0, 12, 0);;
+                $menu['total'] = 0;
             }
+
+            $results[$key] = $menu;
         }
 
         //Group by kategori
         $results = collect($results)->groupBy('kategori');
 
-        return view('sales-report', ['results' => $results, 'summaryMonths' => $summaryMonths, 'year' => $year]);
+        return view('sales-report', [
+            'results' => $results,
+            'summaryMonths' => $summaryMonths,
+            'year' => $year,
+            'isValidYear' => $isValidYear,
+        ]);
     }
 }

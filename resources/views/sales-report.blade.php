@@ -56,58 +56,60 @@
                     </div>
                 </form>
                 <hr>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" style="margin: 0;">
-                        <thead>
-                        <tr class="table-dark">
-                            <th rowspan="2" style="text-align:center;vertical-align: middle;width: 250px;">Menu</th>
-                            <th colspan="12" style="text-align: center;">Periode Pada {{ $year }}
-                            </th>
-                            <th rowspan="2" style="text-align:center;vertical-align: middle;width:75px">Total</th>
-                        </tr>
-                        <tr class="table-dark">
-                            <th style="text-align: center;width: 75px;">Jan</th>
-                            <th style="text-align: center;width: 75px;">Feb</th>
-                            <th style="text-align: center;width: 75px;">Mar</th>
-                            <th style="text-align: center;width: 75px;">Apr</th>
-                            <th style="text-align: center;width: 75px;">Mei</th>
-                            <th style="text-align: center;width: 75px;">Jun</th>
-                            <th style="text-align: center;width: 75px;">Jul</th>
-                            <th style="text-align: center;width: 75px;">Ags</th>
-                            <th style="text-align: center;width: 75px;">Sep</th>
-                            <th style="text-align: center;width: 75px;">Okt</th>
-                            <th style="text-align: center;width: 75px;">Nov</th>
-                            <th style="text-align: center;width: 75px;">Des</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($results as $key => $values)
-                            <tr>
-                                <td class="table-secondary" colspan="14"><b>{{ ucwords($key) }}</b></td>
+                @if($isValidYear)
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" style="margin: 0;">
+                            <thead>
+                            <tr class="table-dark">
+                                <th rowspan="2" style="text-align:center;vertical-align: middle;width: 250px;">Menu</th>
+                                <th colspan="12" style="text-align: center;">Periode Pada {{ $year }}
+                                </th>
+                                <th rowspan="2" style="text-align:center;vertical-align: middle;width:75px">Total</th>
                             </tr>
-                            @foreach($values as $value)
+                            <tr class="table-dark">
+                                <th style="text-align: center;width: 75px;">Jan</th>
+                                <th style="text-align: center;width: 75px;">Feb</th>
+                                <th style="text-align: center;width: 75px;">Mar</th>
+                                <th style="text-align: center;width: 75px;">Apr</th>
+                                <th style="text-align: center;width: 75px;">Mei</th>
+                                <th style="text-align: center;width: 75px;">Jun</th>
+                                <th style="text-align: center;width: 75px;">Jul</th>
+                                <th style="text-align: center;width: 75px;">Ags</th>
+                                <th style="text-align: center;width: 75px;">Sep</th>
+                                <th style="text-align: center;width: 75px;">Okt</th>
+                                <th style="text-align: center;width: 75px;">Nov</th>
+                                <th style="text-align: center;width: 75px;">Des</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($results as $key => $values)
                                 <tr>
-                                    <td class="bg-white">{{ $value['menu'] }}</td>
-                                @foreach($value['subtotal'] as $total)
-                                    <td style="text-align: right;" class="bg-white">
-                                        {{ $total === 0 ? '' : number_format($total) }}
+                                    <td class="table-secondary" colspan="14"><b>{{ ucwords($key) }}</b></td>
+                                </tr>
+                                @foreach($values as $value)
+                                    <tr>
+                                        <td class="bg-white">{{ $value['menu'] }}</td>
+                                        @foreach($value['subtotal'] as $total)
+                                            <td style="text-align: right;" class="bg-white">
+                                                {{ $total === 0 ? '' : number_format($total) }}
+                                            </td>
+                                        @endforeach
+                                        <td class="bg-white" style="text-align: right;"><b>{{ number_format($value['total']) }}</b></td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                            <tr class="table-dark">
+                                <td><b>Total</b></td>
+                                @foreach($summaryMonths as $summaryMonth)
+                                    <td style="text-align: right;">
+                                        <b>{{ $summaryMonth === 0 ? '' : number_format($summaryMonth) }}</b>
                                     </td>
                                 @endforeach
-                                    <td class="bg-white" style="text-align: right;"><b>{{ number_format($value['total']) }}</b></td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                        <tr class="table-dark">
-                            <td><b>Total</b></td>
-                            @foreach($summaryMonths as $summaryMonth)
-                                <td style="text-align: right;">
-                                    <b>{{ $summaryMonth === 0 ? '' : number_format($summaryMonth) }}</b>
-                                </td>
-                            @endforeach
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
             <?php if(isset($menu)){?>
 
